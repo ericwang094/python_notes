@@ -29,3 +29,29 @@ if __name__ == '__main__':
     n = int(input())
     print(*range(1, n+1), sep="")
 ```
+
+* Copy a list, they are two separate lists
+```python
+my_list = [1, 2, 3]
+new_list = my_list[:]
+```
+
+* tuple is immutable
+
+* looping through map
+```python
+user_map = {
+    "username": "eric",
+    "pwd": "123",
+    "age": 30
+}
+for key, value in user_map.items():
+    print(key) 
+    print(value)
+
+for key in user_map.keys():
+    print(key)
+
+for value in user_map.values():
+    print(value) 
+```

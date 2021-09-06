@@ -10,7 +10,6 @@ def print_hi(name):
     print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
 
 
-print(type(range(1,2)))
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
@@ -23,4 +22,6 @@ print("a")
 print("B")
 
 my_str = "abcde"
-print(my_str.center(1))
+print(my_str.split())
+
+print(list(range(10)))
