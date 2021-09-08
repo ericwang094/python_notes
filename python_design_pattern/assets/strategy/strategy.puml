@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Context {
+    -strategy
+    +setStrategy(strategy)
+    +execute(arg)
+}
+
+
+interface Strategy {
+    +execute(arg)
+}
+
+class ConcreteStrategy {
+    +execute(arg)
+}
+
+class Client
+
+Context o-- Strategy
+ConcreteStrategy <|-- Strategy
+Client --> Context
+Client ..> ConcreteStrategy
+
+@enduml
