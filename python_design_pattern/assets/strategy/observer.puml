@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract Publisher {
+    -state
+    -Observer[] observer_list
+    +attach(Observer observer)
+    +detach(Observer observer)
+    +notify()
+}
+
+class ConcretePublisher {
+    -state
+    +attach(Observer observer)
+    +detach(Observer observer)
+    +notify()
+    +do_some_business_logic
+}
+
+abstract Observer {
+    +subscribe(Publisher publisher)
+}
+
+class ConcreteObserver {
+    +subscribe(Publisher publisher))
+}
+
+ConcretePublisher --> Publisher
+ConcreteObserver --> Observer
+Publisher *--* Observer
+
+
+
+@enduml
