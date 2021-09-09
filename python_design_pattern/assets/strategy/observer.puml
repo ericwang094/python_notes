@@ -27,7 +27,7 @@ class ConcreteObserver {
 
 ConcretePublisher --> Publisher
 ConcreteObserver --> Observer
-Publisher *--* Observer
+Publisher --*  "many" Observer
 
 
 
