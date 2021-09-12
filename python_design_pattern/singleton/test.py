@@ -1,4 +1,5 @@
-from threading import Lock, Thread
+from threading import Thread, Lock
+from abc import ABC
 
 
 class SingletonMeta(type):
@@ -17,19 +18,22 @@ class SingletonMeta(type):
 
 
 class Singleton(metaclass=SingletonMeta):
-    value: str = None
+
+    _value: str
 
     def __init__(self, value: str):
-        self.value = value
+        self._value = value
 
 
-def test_singleton(value: str) -> None:
+def test_instance(value: str):
+
     instance = Singleton(value)
-    print(instance.value)
+    print(instance._value)
 
 
-if __name__ == "__main__":
-    process1 = Thread(target=test_singleton, args=("FOO",))
-    process2 = Thread(target=test_singleton, args=("BAR",))
-    process1.start()
-    process2.start()
+if __name__ == '__main__':
+    instance1 = Thread(target=test_instance, args=("FOO",))
+    instance2 = Thread(target=test_instance, args=("BAR",))
+
+    instance1.start()
+    instance2.start()
