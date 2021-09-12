@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+
+class ConcreteBaseBeverage{
+}
+
+class Decorator {
+    -beverage: Beverage
+    +get_description() -> str
+}
+
+class ConcreteDecoratorA{
+    -beverage: Beverage
+    +get_description() -> str
+}
+
+class ConcreteDecoratorB{
+    -beverage: Beverage
+    +get_description() -> str
+}
+
+class Beverage {
+    -description: str
+    -cost: float
+}
+
+Decorator --> Beverage
+ConcreteBaseBeverage --> Beverage
+ConcreteDecoratorA --> Decorator
+ConcreteDecoratorB --> Decorator
+
+@enduml
