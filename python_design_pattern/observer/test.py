@@ -3,22 +3,66 @@ from abc import ABC, abstractmethod
 from typing import List
 
 
-class Subject(ABC):
+class Publisher:
 
-    @property
-    @abstractmethod
-    def state(self):
-        pass
+    _state: int
 
-    @property
-    @abstractmethod
-    def subscribers(self):
-        pass
+    _subscriber: List
 
-    @abstractmethod
+    def __init__(self):
+        self._subscriber = []
+
     def attach(self, subscriber: Subscriber):
-        pass
+        self._subscriber.append(subscriber)
+
+    def detach(self, subscriber: Subscriber):
+        self._subscriber.remove(subscriber)
+
+    def notify(self):
+        for subs in self._subscriber:
+            subs.execute()
+
+
+class Subscriber(ABC):
+
+    _publisher: Publisher
+
+    def subscribe(self):
+        self._publisher.attach(self)
+
+    @property
+    def publisher(self):
+        return self._publisher
+
+    @publisher.setter
+    def publisher(self, publisher):
+        self._publisher = publisher
 
     @abstractmethod
-    def detach(self, subscriber: Subscriber):
+    def execute(self):
+        pass
 
+
+class ConcreteSubscriber1(Subscriber):
+    def execute(self):
+        print("concrete subscriber1 subscribed")
+
+
+class ConcreteSubscriber2(Subscriber):
+    def execute(self):
+        print("concrete subscriber2 subscribed")
+
+
+if __name__ == '__main__':
+    publisher = Publisher()
+    concreteSub1 = ConcreteSubscriber1()
+    concreteSub2 = ConcreteSubscriber2()
+
+    publisher.attach(concreteSub1)
+    # publisher.notify()
+    #
+    publisher.attach(concreteSub2)
+    # publisher.notify()
+
+    publisher.detach(concreteSub1)
+    publisher.notify()

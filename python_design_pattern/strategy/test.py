@@ -1,27 +1,27 @@
 from abc import ABC, abstractmethod
 
 
-class IFlyBehavior:
+class FlyBehavior:
 
     @abstractmethod
     def fly(self):
         pass
 
 
-class IQuackBehavior:
+class QuackBehavior:
 
     @abstractmethod
     def quack(self):
         pass
 
 
-class IDuck:
+class Duck(ABC):
 
-    _fly_behavior: IFlyBehavior
+    _fly_behavior: FlyBehavior
 
-    _quack_behavior: IQuackBehavior
+    _quack_behavior: QuackBehavior
 
-    def __init__(self, fly_behavior: IFlyBehavior, quack_behavior: IQuackBehavior) -> None:
+    def __init__(self, fly_behavior: FlyBehavior, quack_behavior: QuackBehavior):
         self._fly_behavior = fly_behavior
         self._quack_behavior = quack_behavior
 
@@ -30,7 +30,7 @@ class IDuck:
         return self._fly_behavior
 
     @fly_behavior.setter
-    def fly_behavior(self, fly_behavior: IFlyBehavior):
+    def fly_behavior(self, fly_behavior):
         self._fly_behavior = fly_behavior
 
     @property
@@ -42,47 +42,48 @@ class IDuck:
         self._quack_behavior = quack_behavior
 
     def display(self):
-        self._fly_behavior.fly()
-        self._quack_behavior.quack()
+        self.fly_behavior.fly()
+        self.quack_behavior.quack()
 
 
-class FlyWithWings(IFlyBehavior):
+class FlyWithWings(FlyBehavior):
     def fly(self):
         print("fly with wings")
 
 
-class FlyNoWay(IFlyBehavior):
+class FlyNoWay(FlyBehavior):
     def fly(self):
-        print("Fly no way")
+        print("fly no way")
 
 
-class QuackLoad(IQuackBehavior):
+class QuackLoad(QuackBehavior):
     def quack(self):
         print("quack load")
 
 
-class QuackNoWay(IQuackBehavior):
+class QuackNoWay(QuackBehavior):
     def quack(self):
         print("quack no way")
 
 
-class NormalDuck(IDuck):
+class NormalDuck(Duck):
     pass
 
 
-class SpecialDuck(IDuck):
+class SuperDuck(Duck):
     pass
 
 
 if __name__ == '__main__':
-
+    print("Normal Duck")
     normal_duck = NormalDuck(FlyWithWings(), QuackLoad())
     normal_duck.display()
 
-    special_duck = NormalDuck(FlyNoWay(), QuackNoWay())
-    special_duck.display()
+    print("Super Duck")
+    super_duck = SuperDuck(FlyNoWay(), QuackNoWay())
+    super_duck.display()
 
-    # promote normal duck to be special
+    print("Promote normal duck")
     normal_duck.fly_behavior = FlyNoWay()
     normal_duck.quack_behavior = QuackNoWay()
     normal_duck.display()

@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractFactory {
+    +createProductA()
+    +createProductB()
+}
+
+abstract class ProductA
+
+abstract class ProductB
+
+class ConcreteFactory1 {
+    +createProductA()
+    +createProductB()
+}
+
+class ConcreteFactory2 {
+    +createProductA()
+    +createProductB()
+}
+
+class ConcreteProductA1
+
+class ConcreteProductA2
+
+class ConcreteProductB1
+
+class ConcreteProductB2
+
+ConcreteFactory1 --> AbstractFactory
+ConcreteFactory2 --> AbstractFactory
+ConcreteProductA1 --> ProductA
+ConcreteProductB1 --> ProductA
+ConcreteProductA2 --> ProductB
+ConcreteProductB2 --> ProductB
+
+ConcreteFactory1 --> ConcreteProductA1
+ConcreteFactory1 --> ConcreteProductB1
+ConcreteFactory2 --> ConcreteProductA2
+ConcreteFactory2 --> ConcreteProductB2
+
+
+@enduml

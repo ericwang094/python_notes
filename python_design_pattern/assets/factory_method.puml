@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class AbstractFactory {
+    +factory_method()
+}
+
+class Product {
+    +operation()
+}
+
+class ConcreteFactory1 {
+    factory_method(): Product1
+}
+
+class ConcreteFactory2 {
+    factory_method(): Product2
+}
+
+class Product1 {}
+
+class Product1 {}
+
+Product1 --> Product
+Product2 --> Product
+ConcreteFactory1 --> AbstractFactory
+ConcreteFactory2 --> AbstractFactory
+
+AbstractFactory ..> Product
+@enduml

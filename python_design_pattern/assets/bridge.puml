@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class client_inheritance
+class target_inheritance
+class adaptee_inheritance
+class adapter_inheritance
+
+client_inheritance --> target_inheritance
+adapter_inheritance --> target_inheritance
+adapter_inheritance --> adaptee_inheritance
+
+class client_object
+class target_object
+class adaptee_object
+class adapter_object {
+    -adaptee_object
+}
+
+client_object --> target_object
+
+
+
+
+@enduml

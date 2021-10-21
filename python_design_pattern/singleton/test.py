@@ -1,6 +1,6 @@
-from abc import ABC, abstractmethod
-from typing import List
 from threading import Thread, Lock
+from abc import ABC
+
 
 class SingletonMeta(type):
 
@@ -9,7 +9,6 @@ class SingletonMeta(type):
     _lock = Lock()
 
     def __call__(cls, *args, **kwargs):
-
         with cls._lock:
             if cls not in cls._instance:
                 instance = super().__call__(*args, **kwargs)
@@ -20,21 +19,21 @@ class SingletonMeta(type):
 
 class Singleton(metaclass=SingletonMeta):
 
-    value: str = None
+    _value: str
 
     def __init__(self, value: str):
-        self.value = value
+        self._value = value
 
 
-
-def test_singleton(value: str):
+def test_instance(value: str):
 
     instance = Singleton(value)
-    print(instance.value)
+    print(instance._value)
 
 
 if __name__ == '__main__':
-    instance1 = Thread(target=test_singleton, args=("FOO",))
-    instance2 = Thread(target=test_singleton, args=("BAR",))
+    instance1 = Thread(target=test_instance, args=("FOO",))
+    instance2 = Thread(target=test_instance, args=("BAR",))
+
     instance1.start()
     instance2.start()
