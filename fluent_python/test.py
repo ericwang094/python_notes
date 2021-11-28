@@ -1,4 +1,2 @@
-def my_fun(test: 'int > 0'):
-    pass
+avg(10)
 
-my_fun(-1)
