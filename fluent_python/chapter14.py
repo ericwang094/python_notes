@@ -13,7 +13,7 @@ class Sentence_1:
     # 2. if __iter__ is not implemented, but __getitem__ is implemented,
     # python creates an iterator that attempts to fetch
     # items in order, starting form index 0.
-    # 3. If that fails, python raises TypeError, usually saying  object is not iterable
+    # 3. If that fails, python raises TypeError, usually saying object is not iterable
     # this is why all python sequence is iterable, they all implement __getitem__,
     # in fact the standard sequence also implement __iter__,
     # the special handling of __getitem__ exists for backward compatibility
@@ -49,35 +49,6 @@ class Sentence_2:
     def __iter__(self):
         return SentenceIterator(self.words)
 
-# Generator
-class Sentence_3:
-    def __init__(self, text):
-        self.text = text
-        self.words = RE_WORD.findall(text)
-
-    def __repr__(self):
-        return 'Sentence(%s)' % reprlib.repr(self.text)
-
-    def __iter__(self):
-        # generator function doesn't raise StopIteration, it simply exists when its done.
-        # no need for a separate iterator class
-        for word in self.words:
-            yield word
-
-
-class Sentence_4_lazy:
-    def __init__(self, text):
-        self.text = text
-
-    def __repr__(self):
-        return 'Sentence(%s)' % reprlib.repr(self.text)
-
-    def __iter__(self):
-        for match in RE_WORD.finditer(self.text):
-            yield match.group()
-
-        # or to use syntactic sugar
-        # return (match.group() for match in RE_WORD.finditer(self.text))
 
 # Difference between iterable and iterator:
 # iterable have an __iter__ method the instantiates a new iterator every time
@@ -97,6 +68,37 @@ class SentenceIterator:
 
     def __iter__(self):
         return self
+
+
+# Generator
+class Sentence_3:
+    def __init__(self, text):
+        self.text = text
+        self.words = RE_WORD.findall(text)
+
+    def __repr__(self):
+        return 'Sentence(%s)' % reprlib.repr(self.text)
+
+    def __iter__(self):
+        # generator function doesn't raise StopIteration, it simply exists when its done. from me: this is not true
+        # no need for a separate iterator class
+        for word in self.words:
+            yield word
+
+
+class Sentence_4_lazy:
+    def __init__(self, text):
+        self.text = text
+
+    def __repr__(self):
+        return 'Sentence(%s)' % reprlib.repr(self.text)
+
+    def __iter__(self):
+        for match in RE_WORD.finditer(self.text):
+            yield match.group()
+
+        # or to use syntactic sugar
+        # return (match.group() for match in RE_WORD.finditer(self.text))
 
 
 if __name__ == '__main__':
