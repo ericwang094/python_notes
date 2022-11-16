@@ -1,0 +1,13 @@
+total 40
+drwxrwxr-x  2 eric eric 4096 Nov 16 20:55 .
+drwxrwxr-x 10 eric eric 4096 Nov 15 22:03 ..
+-rwxrwxr-x  1 eric eric  130 Nov 15 22:16 01helloScript.sh
+-rwxrwxr-x  1 eric eric 1118 Nov 16 20:38 02heredoc.sh
+-rwxrwxr-x  1 eric eric  735 Nov 16 20:38 03conditional.sh
+-rwxrwxr-x  1 eric eric  474 Nov 16 20:38 04loop.sh
+-rwxrwxr-x  1 eric eric  361 Nov 16 20:52 05input.sh
+-rwxrwxr-x  1 eric eric  167 Nov 16 20:55 06stdin.sh
+-rw-rw-r--  1 eric eric    0 Nov 16 20:55 file1.txt
+-rw-rw-r--  1 eric eric    0 Nov 16 20:55 file2.txt
+-rwxrwxr-x  1 eric eric  367 Nov 16 20:32 my_test.sh
+-rw-rw-r--  1 eric eric   52 Nov 16 20:51 test_input_file.txt
