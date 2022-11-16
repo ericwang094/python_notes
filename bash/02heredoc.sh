@@ -1,4 +1,4 @@
-# usr/bin/bash
+#! /bin/bash
 
 # https://linuxize.com/post/bash-heredoc/
 
