@@ -26,3 +26,10 @@ funcCheck
 # no local variable
 echo $returningValue
 
+function funcReturnValue() {
+  return 100
+}
+
+
+echo $?
+

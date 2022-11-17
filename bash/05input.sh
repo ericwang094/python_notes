@@ -3,6 +3,13 @@
 # $0 will be the file name
 echo $0 $1 $2 $3
 
+
+# if the variable is unset
+my_country=${country:-China}
+echo $my_country
+
+
+
 # unlimited number of inputs
 args=("$@")
 
@@ -24,3 +31,4 @@ while read line
 do
   echo "$line"
 done < "${1:-/dev/stdin}"
+
