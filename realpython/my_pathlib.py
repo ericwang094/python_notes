@@ -25,12 +25,15 @@ with read_path.open(mode='w') as fid:
 # resolve
 print("#### resolve path ####")
 resolve_path = pathlib.Path("test.md")
+with resolve_path.open(mode='w') as p:
+    p.write("abc")
 print(f"before resolve: {resolve_path}")
 print(f"after resolve: {resolve_path.resolve()}")
 resolve_not_exist_path = pathlib.Path("not_exist")
 print(f"none_exist after resolve: {resolve_not_exist_path.resolve()}")
 
 # path components
+print("#### component path ####")
 component_path = resolve_path.resolve()
 print(f"path.name: {component_path.name}")
 print(f"file name without suffix: {component_path.stem}")
@@ -40,3 +43,26 @@ print(f"path.parent.parent: {component_path.parent.parent}")
 
 # recursive dir
 print(f"recursive list: {list(component_path.parent.parent.rglob('*'))}")
+
+print("#### rename file ####")
+# rename file
+# When you are renaming files, useful methods might be .with_name() and .with_suffix().
+# They both return the original
+# path but with the name or the suffix replaced, respectively.
+replace_suffix = component_path.with_suffix('.txt')
+print(f"replace_suffix: {replace_suffix}")
+component_path.replace(replace_suffix)
+
+# counting files
+print("#### counting files ####")
+import collections
+print(collections.Counter(p.suffix for p in pathlib.Path.cwd().iterdir()))
+
+# display a tree
+def tree(directory):
+    print(f" + {directory}")
+    for path in sorted(directory.rglob("*")):
+        depth = len(path.relative_to(directory).parts)
+        spacer = '    ' * depth
+        print(f"{spacer}+ {path.name}")
+tree(pathlib.Path.cwd().parent)
