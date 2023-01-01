@@ -60,6 +60,24 @@ class Solution:
             nums[min_index], nums[i] = nums[i], nums[min_index]
         return nums
 
+    def bubble_sort(self, nums):
+        """
+        :param nums:
+        :return:
+
+        Bubble sort is a sorting algorithm that
+        compares two adjacent elements and swaps them until
+        they are in the intended order.
+
+        Time Complexity O(n^2)
+        space O(1)
+        """
+        for i in range(len(nums)):
+            for j in range(len(nums) - i - 1):
+                if nums[j] > nums[j + 1]:
+                    nums[j], nums[j + 1] = nums[j + 1], nums[j]
+        return nums
+
     def heapSort(self, nums):
         def heapify(nums, n, i):
             l = 2 * i + 1
@@ -86,6 +104,20 @@ class Solution:
             nums[i], nums[0] = nums[0], nums[i]
             heapify(nums, i, 0)
         return nums
+
+    def insertion_sort(self, nums: List[int]) -> List[int]:
+        # we don't need to start from 0 because 0 is already sorted
+        for i in range(1, len(nums)):
+            key = nums[i]
+
+            # move elements of nums[0..i-1] that
+            # are greater than key
+            j = i - 1
+            while (j >= 0 and key < nums[j]):
+                nums[j + 1] = nums[j]
+                j -= 1
+            nums[j + 1] = key
+            return nums
     def sortArray(self, nums: List[int]) -> List[int]:
         """
                 :type nums: List[int]
