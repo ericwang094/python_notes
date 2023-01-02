@@ -1,4 +1,5 @@
 ### 对数器
+import math
 import random
 from typing import List, Callable
 
@@ -38,13 +39,38 @@ def insertion_sort(nums: List[int]) -> List[int]:
     return nums
 
 
+def merge_sort(nums: List[int]) -> List[int]:
+    """
+    Time complexity O(nlogn)
+
+    :param nums:
+    :return:
+    """
+    if len(nums) <= 1:
+        return nums
+    mid = len(nums) // 2
+    left = merge_sort(nums[:mid])
+    right = merge_sort(nums[mid: len(nums)])
+    i = j = k = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            nums[k] = left[i]
+            i += 1
+        else:
+            nums[k] = right[j]
+            j += 1
+        k += 1
+    while i < len(left):
+        nums[k] = left[i]
+        i += 1
+        k += 1
+    while j < len(right):
+        nums[k] = right[j]
+        j += 1
+        k += 1
+    return nums
 def generator_random_list(max_element: int, max_length: int) -> List[int]:
-    random_list = []
-    for _ in range(random.randint(0, max_length)):
-        random_list.append(random.randint(0, max_element) - random.randint(0, max_element))
-
-    return random_list
-
+    return [random.randint(0, max_element) - random.randint(0, max_element) for _ in range(random.randint(0, max_length))]
 
 def compare(selection_method: Callable):
 
@@ -69,7 +95,9 @@ def compare(selection_method: Callable):
         print(f"{selection_method} sort is right")
 
 def main():
-    sort_algos = [selection_sort, bubble_sort, insertion_sort]
+    sort_algos = [selection_sort, bubble_sort, insertion_sort, merge_sort]
+    # sort_algos = [merge_sort]
+
     for sort_algo in sort_algos:
         compare(sort_algo)
 
