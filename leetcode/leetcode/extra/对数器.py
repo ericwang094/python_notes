@@ -73,7 +73,6 @@ def generator_random_list(max_element: int, max_length: int) -> List[int]:
     return [random.randint(0, max_element) - random.randint(0, max_element) for _ in range(random.randint(0, max_length))]
 
 def compare(selection_method: Callable):
-
     max_element = 100000
     max_length = 1000
     test_times = 500
