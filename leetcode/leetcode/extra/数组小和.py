@@ -37,8 +37,7 @@ def getSmallSum(arr: List[int]) -> int:
                 right += 1
         res += arr[left: mid + 1]
         res += arr[right: end + 1]
-        for i in range(start, end + 1):
-            arr[i] = res.pop(0)
+        arr[start: end + 1] = res
         return sum
 
     if arr == None or len(arr) == 0:
@@ -46,57 +45,105 @@ def getSmallSum(arr: List[int]) -> int:
 
     return mergeSort(arr, 0, len(arr) - 1)
 
-def merge_sort(nums: List[int]) -> List[int]:
-    if nums is None or len(nums) < 2:
-        return nums
-    mid = len(nums) // 2
-    left = merge_sort(nums[:mid])
-    right = merge_sort(nums[mid:])
 
-    i = j = k = 0
-    while i < len(left) and j < len(right):
-        if left[i] <= right[j]:
-            nums[k] = left[i]
-            i += 1
-        else:
-            nums[k] = right[j]
-            j += 1
-        k += 1
-    while i < len(left):
-        nums[k] = left[i]
-        i += 1
-        k += 1
-    while j < len(right):
-        nums[k] = right[j]
-        j += 1
-        k += 1
-    return nums
+# Method 3
+def test(nums: List[int]) -> int:
+    if nums is None or len(nums) == 0:
+        return 0
 
-def compartor(nums: List[int]) -> int:
-    nums = merge_sort(nums)
-    counter = Counter(nums)
+    return mm_sort(nums, 0, len(nums) - 1)
+
+def mm_sort(nums: List[int], start: int, end: int) -> int:
+    if start == end:
+        return 0
+
+    mid = start + (end - start) // 2
+    return mm_sort(nums, start, mid) + mm_sort(nums, mid + 1, end) + mm_merge(nums, start, mid, end)
+
+def mm_merge(nums: List[int], start: int, mid: int, end: int) -> int:
+    left = start
+    right = mid + 1
+    res = []
     sum = 0
-    for num in nums:
-        if counter.get(num) is None:
-            continue
-        occurance = counter.get(num)
-        sum += occurance * num * len(counter)
+    while left <= mid and right <= end:
+        if nums[left] < nums[right]:
+            res.append(nums[left])
+            sum += nums[left] * (end - right + 1)
+            left += 1
+        else:
+            res.append(nums[right])
+            right += 1
+    res.extend(nums[left: mid + 1])
+    res.extend(nums[right: end + 1])
+
+    for i in range(start, end + 1):
+        nums[i] = res.pop(0)
     return sum
 
+# ac version
+# python3 solution
+def min_sum_entry(array):
+    return min_sum(array, 0, len(array) - 1)
+def min_sum(array, l, r):
+    if l == r:
+        return 0
+    mid = l + (r - l) // 2
+    l_min_sum = min_sum(array, l, mid )
+    r_min_sum = min_sum(array, mid + 1, r)
+    extra = merge(array, l, mid, r)
+
+    return l_min_sum + r_min_sum + extra
+
+
+def merge(array, l, m, r):
+    """Merge sort."""
+    res = 0
+    # sorted array[l: r]
+    temp = []
+    i, j = l, m + 1
+    while i <= m and j <= r:
+        if array[i] < array[j]:
+            res += array[i] * (r - j + 1)
+            temp.append(array[i])
+            i += 1
+        else:
+            temp.append(array[j])
+            j += 1
+
+    while i <= m:
+        temp.append(array[i])
+        i += 1
+
+    while j <= r:
+        temp.append(array[j])
+        j += 1
+
+    array[l: r + 1] = temp
+
+    return res
+
 def main():
-    test_times = 5000
-    max_value = 5000
-    max_elements = 500
+    # test_times = 500
+    # max_value = 5000
+    # max_elements = 500
+    
+    test_times = 1
+    max_value = 5
+    max_elements = 5
 
     list_a = [random.randint(0, max_value) - random.randint(0, max_value) for _ in range(max_elements)]
+    list_a = [1, 3, 5, 2, 4, 6]
     list_b = list_a[:]
-
-    standard_result = getSmallSum(list_a)
+    print("test list: ")
+    print(list_a)
+    standard_result = min_sum_entry(list_a)
     my_result = getSmallSum(list_b)
     is_success = True
     for _ in range(test_times):
         if standard_result != my_result:
             print("result not the same")
+            print(f"standard_result: {standard_result}")
+            print(f"my_result: {my_result}")
             is_success = False
             break
     if is_success:
