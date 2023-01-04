@@ -149,6 +149,22 @@ class Solution:
             j += 1
             k += 1
         return nums
+
+    def quick_sort(self, nums: List[int]) -> List[int]:
+        """
+        1. [i] < pivot, [i] switch with the next item in smaller range, i++
+        2. [i] == piovt, i++
+        3. [i] > pivot, [i] switch with the previous item in greater, i keep same
+        :param nums:
+        :return:
+        """
+        def helper(head, tail):
+            if head >= tail:
+                return
+            l, r = head, tail
+            pivot = nums[(r - l) // 2]
+            while l <= r:
+                while l <= r and
     def sortArray(self, nums: List[int]) -> List[int]:
         """
                 :type nums: List[int]
