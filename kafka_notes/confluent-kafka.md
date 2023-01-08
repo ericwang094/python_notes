@@ -1,5 +1,35 @@
-# Chapter 2 - Installing Kafka
 
+# Chapter 2 - Installing Kafka
+**My Installation**
+* `brew install zookeeper`
+* confirm the java_home
+* go to `/opt/homebrew/Cellar/zookeeper/3.7.0_1/bin`
+* we can use `zkServer start` or `zkServer stop` to start/stop service
+* when we start, we found that zookeeper is using default config file located at
+`/opt/homebrew/etc/zookeeper/zoo.cfg`
+we add following config into it
+```
+dataDir=/Users/eric.wang/Desktop/zookeeper_data
+```
+* To verify if zookeeper is running, first to install telnet
+* `brew install telnet`
+* `telnet loclahost 2181` then `srvr`
+* download kafka `brew install kafka`
+* change kafka setting to enable advertised port
+* ```
+  advertised.listeners=PLAINTEXT://localhost:9092
+  ```
+* run kafka `opt/homebrew/Cellar/kafka/3.3.1_1/bin/kafka-server-start -daemon libexec/c
+onfig/server.properties`
+* create topic, when run 
+```
+/opt/homebrew/Cellar/kafka/3.3.1_1/bin/kafka-topics \
+--create --bootstrap-server localhost:9092 \
+--replication-factor 1 \
+--partitions 1 \
+--topic test
+```
+running into error of broker may not be available
 **Topic defaults**
 * num.partitions
   * partition can only increase not decrease.
