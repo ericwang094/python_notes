@@ -29,7 +29,10 @@ onfig/server.properties`
 --partitions 1 \
 --topic test
 ```
-running into error of broker may not be available
+~~running into error of broker may not be available~~. Solved by setting JAVA_HOME correctly
+`export JAVA_HOME=$(/usr/libexec/java_home)`
+
+I spent a lot of time to build up connection. Worth reading this [blog](https://www.confluent.io/blog/kafka-listeners-explained/) 
 **Topic defaults**
 * num.partitions
   * partition can only increase not decrease.
@@ -65,3 +68,53 @@ at least 20 partitions.
   * default none
 * message.max.bytes
   * default 1mb. will receive error from broker if the size is bigger than this. it is after compressed value.
+
+**producer config**
+* ack
+  * The acks parameter controls how many partition replicas 
+     must receive the record before the producer can consider the write successful
+  * ack=0, the producer will not wait for a reply from the broker before assuming the message was sent 
+    successfully. this means that if something went wrong and the broker did not receive the message
+    the producer will not know about it
+  * ack=1, the producer will receive a success response from the broker the moment the leader replica
+    received the message. producer will retry sending the message if message can't be written into
+    the leader. Throughput will be impacted between asyn and sync approach, for sync approach, the 
+    latency will increase significantly because producer is waiting for the response form broker 
+    confirmation. if async, the latency is hidden.
+  * ack=all, safest option but latency will be even higher compare to ack=1
+  ...
+* producer ordering guarantee
+Apache Kafka preserves the order of messages within a partition. 
+This means that if messages were sent from the producer in a spe‐ cific order, 
+the broker will write them to a partition in that order and all consumers will read 
+them in that order. For some use cases, order is very important. 
+There is a big difference between deposit‐ ing $100 in an account and later withdrawing it, 
+and the other way around! However, some use cases are less sensitive.
+Setting the retries parameter to nonzero and the max.in.flights.requests.per.session 
+to more than one means that it is possible that the broker will fail to write the
+first batch of messages, succeed to write the second (which was already in- flight), 
+and then retry the first batch and succeed, thereby reversing the order.
+Usually, setting the number of retries to zero is not an option in a reliable system, 
+so if guaranteeing order is critical, we recommend setting in.flight.requests.per.session=1 to make sure that while a 
+batch of messages is retrying, additional messages will not be sent 
+(because this has the potential to reverse the correct order). 
+This will severely limit the throughput of the producer, 
+so only use this when order is important.
+
+**Consumer**
+* When a consumer leave or join a consumer group, it is moving partition ownership from one consumer 
+to another, it is called rebalance. Rebalance is normally fairly undesirable, as during rebalance,
+consumer can't consume messages so rebalance is basically a short window of unavailablility 
+of the entire consumer group.  
+The way consumer maintain membership in a consumer group and ownership of partition assigned 
+to them is by sending heartbeats to a kafka broker designated as the group coordinator (this broker
+can be different for consumer groups)
+When a consumer join the group, it sends a JoinGroup request to the request coordinator. 
+The first consumer join the group become the group leader. The leader will receive a list of all
+consumers in the group from the group coordinator. It then responsible for assigning a subset of 
+partitions of each consumer.
+* commit offset
+  * auto commit
+  * sync commit
+  * async commit
+  * combine together
