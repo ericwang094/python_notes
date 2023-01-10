@@ -85,7 +85,7 @@ at least 20 partitions.
   ...
 * producer ordering guarantee
 Apache Kafka preserves the order of messages within a partition. 
-This means that if messages were sent from the producer in a spe‐ cific order, 
+This means that if messages were sent from the producer in a specific order, 
 the broker will write them to a partition in that order and all consumers will read 
 them in that order. For some use cases, order is very important. 
 There is a big difference between deposit‐ ing $100 in an account and later withdrawing it, 
@@ -118,3 +118,39 @@ partitions of each consumer.
   * sync commit
   * async commit
   * combine together
+
+## Chapter 5 - Kafka internals
+* The controller. The controller is one of the kafka brokers that, in additional to the 
+usual broker functionality, it is responsible for electing partition leader. All brokers
+join in cluster, they will try to create an ephemeral node in ZooKeeper, but only the first one will
+succeed others will receive "node already exists" exception which causes them to realise that 
+the controller node already exists.
+When the controller broker loses connectivity, the ephemeral node will disappear, other brokers 
+will be notified through the Zookeeper watch and will attempt to create a controller. Again, first
+come first served.
+All partitions that had a leader on the old broker will need to choose a new leader, it will simply
+go to the next replica in the replica list of that partition.
+
+*Replication
+  * Leader replica, responsible for client requests
+    * follower replica, not handling client requests. Followers attempt to stay up-to-date by 
+      replicating all the messages from the leader as messages arrive but they can fail to stay in sync
+      for various reason.
+      How followers update to date? it will send fetch requests to leader, 
+      and the leader will send the message back in response. The messages are in order
+      for example, a replica request message 1, then message 2, and then message 3, it will
+      not request message 4 before it get all previous message. So leader know that how far 
+      each relica is. If a replica hasn't requested a message in more than 10 secs or hasn't 
+      caught up to the most recent messages in more than 10 seconds, the replica is considered 
+      out of sync. If a replica out of sync, it can no longer become the new leader in the 
+      event of failure.
+      Each partition has a preferred leader-the replica that was the leader when the topic was
+      originally created, it is preferred because when partitions are first created, the leaders are 
+      balanced between brokers.
+* Compaction
+  * delete. which deletes events older than retention time
+  * compact, which only store the most recent value for each key in the topic. 
+    * user case can be - client only need to remember the most recent shipping address.
+    * messages that have been compacted are called clean, messages received after the last compaction
+      is called dirty. When topics compacted are decided by `min.cleanable.dirty.ratio` , default is 50% which mean,
+      once 50% of the topic contains dirty records, it will perform compaction.
